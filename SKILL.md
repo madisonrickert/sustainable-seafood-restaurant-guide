@@ -156,6 +156,8 @@ Study `assets/template.html` for the complete implementation. Key design element
 - Rounded corners on first/last items, divider lines between rows, seafoam hover state
 - Include species-specific Seafood Watch recommendation pages for key species on the menu
 
+**Disclaimer:** Below the source links, always include a small italic disclaimer: *"This guide was generated with AI assistance. Sustainability ratings, ingredient assumptions, and dietary assessments may contain errors. Always confirm with your server before ordering."*
+
 ## Adapting to Different Diets
 
 The template was built for a mostly-vegan sustainable-seafood diet. Adapt the badge system and assessment logic for other diets:
@@ -188,4 +190,4 @@ Seafood Watch is a registered trademark of the Monterey Bay Aquarium Foundation.
 Downloads the Seafood Watch Complete Recommendation List PDF and extracts all species entries into `references/seafood-watch-ratings.md`. Requires `pdfplumber` (installed automatically via `uv run --with`).
 
 ### assets/template.html
-Working example using a fictional restaurant ("The Kelp Garden") that demonstrates all component patterns: hero with linked name, diet banner, collapsible background section, tabbed layout (My Order, Full Menu, Drinks, Ask Server), card types (recommended/skip/conditional), badge system, card verdicts, drink pairings, server questions, and source footer. Read this file when generating a new guide to match the design language exactly.
+Working example using a fictional restaurant ("The Kelp Garden") that demonstrates all component patterns: hero with linked name, diet banner, collapsible background section, tabbed layout (My Order, Full Menu, Drinks, Ask Server), card types (recommended/skip/conditional), badge system, card verdicts, drink pairings, server questions, source footer, and AI disclaimer. Read this file when generating a new guide to match the design language exactly.
