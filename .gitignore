@@ -1,0 +1,9 @@
+# Seafood Watch data (copyrighted — each user must download their own copy)
+references/seafood-watch-ratings.md
+references/.seafood-watch.pdf
+
+# OS
+.DS_Store
+
+# Packaged skill
+*.skill

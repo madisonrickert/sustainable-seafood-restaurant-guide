@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Kelp Garden — Dining Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sea: #1a4a4a;
+  --sea-light: #2a6a6a;
+  --foam: #e8f0ec;
+  --foam-mid: #d1e2d8;
+  --sand: #f5f0e8;
+  --sand-dark: #e8dfd2;
+  --coral: #c75c3a;
+  --coral-light: #e8967a;
+  --kelp: #3d7a4a;
+  --kelp-light: #5a9966;
+  --gold: #b8943e;
+  --gold-light: #d4b85a;
+  --warn: #a85a2a;
+  --text: #2a2a28;
+  --text-mid: #5a5a56;
+  --text-light: #8a8a84;
+  --white: #fdfcf9;
+  --green-bg: #e6f4e8;
+  --green-text: #2a6a3a;
+  --yellow-bg: #faf0d8;
+  --yellow-text: #7a6020;
+  --red-bg: #fae0d8;
+  --red-text: #8a3020;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--sand);
+  color: var(--text);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+.hero {
+  background: linear-gradient(165deg, var(--sea) 0%, var(--sea-light) 60%, var(--kelp) 100%);
+  color: var(--foam);
+  padding: 2.5rem 1.25rem 2rem;
+  position: relative;
+  overflow: hidden;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0; right: 0;
+  height: 24px;
+  background: var(--sand);
+  border-radius: 24px 24px 0 0;
+}
+.hero-eyebrow {
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  opacity: 0.7;
+  margin-bottom: 0.5rem;
+}
+.hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+}
+.hero h1 em { font-style: italic; }
+.hero-sub {
+  margin-top: 0.75rem;
+  font-size: 0.85rem;
+  opacity: 0.8;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1rem;
+}
+.hero-sub span { white-space: nowrap; }
+.hero-note {
+  margin-top: 0.5rem;
+  font-size: 0.72rem;
+  opacity: 0.6;
+  font-style: italic;
+}
+
+.diet-banner {
+  margin: 1rem 1rem 0;
+  padding: 0.75rem 1rem;
+  background: var(--foam);
+  border-radius: 12px;
+  font-size: 0.78rem;
+  color: var(--sea);
+  border-left: 3px solid var(--kelp);
+  line-height: 1.6;
+}
+.diet-banner strong { font-weight: 600; }
+
+.tabs {
+  display: flex;
+  gap: 0;
+  margin: 1.25rem 1rem 0;
+  background: var(--sand-dark);
+  border-radius: 10px;
+  padding: 3px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.tab {
+  flex: 1;
+  text-align: center;
+  padding: 0.55rem 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: var(--text-mid);
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.tab.active {
+  background: var(--white);
+  color: var(--sea);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  font-weight: 600;
+}
+
+.panel { display: none; padding: 0.75rem 1rem 2rem; }
+.panel.active { display: block; }
+
+.section-label {
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-light);
+  margin: 1.25rem 0 0.6rem;
+  padding-left: 2px;
+}
+.section-label:first-child { margin-top: 0.5rem; }
+
+.card {
+  background: var(--white);
+  border-radius: 14px;
+  padding: 1rem 1rem 0.85rem;
+  margin-bottom: 0.6rem;
+  border: 1px solid rgba(0,0,0,0.04);
+  transition: box-shadow 0.15s;
+}
+.card.recommended {
+  border-left: 3px solid var(--kelp);
+}
+.card.skip {
+  opacity: 0.5;
+}
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+.card-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.25;
+  flex: 1;
+}
+.card-price {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-mid);
+  white-space: nowrap;
+}
+.card-desc {
+  font-size: 0.78rem;
+  color: var(--text-mid);
+  margin-top: 0.3rem;
+  line-height: 1.45;
+}
+
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.55rem;
+}
+.badge {
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+.badge.green { background: var(--green-bg); color: var(--green-text); }
+.badge.yellow { background: var(--yellow-bg); color: var(--yellow-text); }
+.badge.red { background: var(--red-bg); color: var(--red-text); }
+.badge.vegan { background: #f0e8f5; color: #6a3a8a; }
+.badge.ask { background: #fef3e0; color: #7a5a20; }
+.badge.pick { background: var(--green-bg); color: var(--kelp); border: 1px solid rgba(61,122,74,0.2); }
+.badge.dairy-free { background: #e8eef8; color: #3a5a8a; }
+
+.card-verdict {
+  font-size: 0.78rem;
+  margin-top: 0.55rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(0,0,0,0.05);
+  color: var(--text-mid);
+  line-height: 1.5;
+}
+.card-verdict strong { color: var(--text); font-weight: 600; }
+
+/* Recommended order */
+.rec-card {
+  background: var(--white);
+  border-radius: 14px;
+  padding: 0.85rem 1rem;
+  margin-bottom: 0.5rem;
+  border: 1px solid rgba(0,0,0,0.04);
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+.rec-num {
+  width: 28px; height: 28px;
+  background: var(--sea);
+  color: var(--foam);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+.rec-body { flex: 1; }
+.rec-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+.rec-why {
+  font-size: 0.72rem;
+  color: var(--text-mid);
+  margin-top: 0.15rem;
+}
+
+/* Drink cards */
+.wine-card {
+  background: var(--white);
+  border-radius: 14px;
+  padding: 1rem;
+  margin-bottom: 0.6rem;
+  border: 1px solid rgba(0,0,0,0.04);
+}
+.wine-card.top-pick {
+  border-left: 3px solid var(--gold);
+}
+.wine-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+.wine-meta {
+  font-size: 0.75rem;
+  color: var(--text-mid);
+  margin-top: 0.25rem;
+}
+.wine-note {
+  font-size: 0.78rem;
+  color: var(--text-mid);
+  margin-top: 0.4rem;
+  line-height: 1.5;
+  font-style: italic;
+}
+
+/* Questions */
+.q-card {
+  background: var(--white);
+  border-radius: 14px;
+  padding: 0.85rem 1rem;
+  margin-bottom: 0.5rem;
+  border: 1px solid rgba(0,0,0,0.04);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+.q-dish {
+  font-weight: 600;
+  color: var(--sea);
+}
+
+.alt-note {
+  background: var(--foam);
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  font-size: 0.78rem;
+  color: var(--sea);
+  line-height: 1.55;
+  margin-top: 0.75rem;
+}
+.alt-note strong { font-weight: 600; }
+
+.footer {
+  padding: 0.5rem 1rem 3rem;
+}
+.footer .section-label {
+  margin-top: 0.75rem;
+}
+.source-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.source-links a {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-size: 0.78rem;
+  font-weight: 500;
+  padding: 0.6rem 0.75rem;
+  background: var(--white);
+  color: var(--text);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  transition: background 0.15s;
+}
+.source-links a:first-child {
+  border-radius: 12px 12px 0 0;
+}
+.source-links a:last-child {
+  border-radius: 0 0 12px 12px;
+  border-bottom: none;
+}
+.source-links a:hover {
+  background: var(--foam);
+}
+.source-tag {
+  font-size: 0.6rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.15rem 0.4rem;
+  border-radius: 5px;
+  flex-shrink: 0;
+  width: 3rem;
+  text-align: center;
+}
+.bg-section {
+  margin: 0.75rem 1rem 0;
+  padding: 0.85rem 1rem;
+  background: var(--white);
+  border-radius: 12px;
+  font-size: 0.75rem;
+  color: var(--text-mid);
+  line-height: 1.6;
+  border: 1px solid rgba(0,0,0,0.04);
+}
+.bg-section summary {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-light);
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.bg-section summary::-webkit-details-marker { display: none; }
+.bg-section summary::before {
+  content: '▸';
+  font-size: 0.6rem;
+  transition: transform 0.2s;
+}
+.bg-section[open] summary::before {
+  transform: rotate(90deg);
+}
+.bg-section .bg-body {
+  margin-top: 0.6rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid rgba(0,0,0,0.05);
+}
+.bg-section strong { color: var(--text); font-weight: 600; }
+
+.source-tag.data { background: var(--green-bg); color: var(--green-text); }
+.source-tag.menu { background: var(--yellow-bg); color: var(--yellow-text); }
+.source-tag.profile { background: #e8eef8; color: #3a5a8a; }
+.source-tag.review { background: #f0e8f5; color: #6a3a8a; }
+.source-label {
+  flex: 1;
+  line-height: 1.3;
+}
+.source-label small {
+  display: block;
+  font-size: 0.65rem;
+  color: var(--text-light);
+  font-weight: 400;
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     EXAMPLE: Fictional restaurant "The Kelp Garden"
+     This template demonstrates all component patterns.
+     Replace everything below with real restaurant data.
+     ============================================================ -->
+
+<div class="hero">
+  <div class="hero-eyebrow">Dining Guide</div>
+  <h1><a href="https://example.com" style="color:inherit;text-decoration:none;"><em>The Kelp Garden</em></a> — Menu Guide</h1>
+  <div class="hero-sub">
+    <span>123 Wharf St, Anytown</span>
+    <span>March 2026</span>
+  </div>
+  <div class="hero-note">Farm-to-table seafood &middot; Est. 2019</div>
+</div>
+
+<div class="diet-banner">
+  <strong>My dietary needs:</strong> Mostly vegan, exceptions for sustainable seafood. No dairy. No eggs. Honey OK. No red wine (headache trigger).
+</div>
+
+<details class="bg-section">
+  <summary>About this restaurant</summary>
+  <div class="bg-body">
+    <strong>The Kelp Garden</strong> is a fictional seafood restaurant used to demonstrate this skill's output. In a real guide, this section would contain the restaurant's story, sourcing philosophy, key suppliers, sustainability commitments, and notable history — all discovered during the research step.<br><br>
+    For example: <em>"Chef Maria Torres sources all shellfish from Pacific Coast Shellfish Co., a family-run operation committed to regenerative aquaculture. The menu changes weekly based on what's sustainable and in season."</em>
+  </div>
+</details>
+
+<div class="tabs">
+  <div class="tab active" data-tab="order">My Order</div>
+  <div class="tab" data-tab="menu">Full Menu</div>
+  <div class="tab" data-tab="drinks">Drinks</div>
+  <div class="tab" data-tab="ask">Ask Server</div>
+</div>
+
+<!-- ========== MY ORDER ========== -->
+<div class="panel active" id="order">
+  <div class="section-label">Recommended order</div>
+
+  <div class="rec-card">
+    <div class="rec-num">1</div>
+    <div class="rec-body">
+      <div class="rec-name">Oysters on the Half Shell</div>
+      <div class="rec-why">Best Choice — farmed oysters, mignonette is dairy/egg-free</div>
+    </div>
+  </div>
+  <div class="rec-card">
+    <div class="rec-num">2</div>
+    <div class="rec-body">
+      <div class="rec-name">Mussels in White Wine Broth</div>
+      <div class="rec-why">Super Green rating — confirm broth has no butter</div>
+    </div>
+  </div>
+  <div class="rec-card">
+    <div class="rec-num">3</div>
+    <div class="rec-body">
+      <div class="rec-name">Grilled Albacore</div>
+      <div class="rec-why">Best Choice (pole-caught), olive oil &amp; herb sauce is dairy-free</div>
+    </div>
+  </div>
+
+  <div class="alt-note">
+    <strong>Backup:</strong> If the mussel broth has butter, swap for the Seaweed Salad (fully vegan). The Clam Chowder and Lobster Roll are off-limits (cream and butter respectively).
+  </div>
+
+  <div class="section-label">Drink pairing strategy</div>
+  <div class="rec-card">
+    <div class="rec-num" style="background:var(--gold)">🍷</div>
+    <div class="rec-body">
+      <div class="rec-name">Muscadet by the glass</div>
+      <div class="rec-why">Bone-dry Loire white — the classic oyster wine</div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== FULL MENU ========== -->
+<div class="panel" id="menu">
+
+  <div class="section-label">Raw Bar</div>
+
+  <div class="card recommended">
+    <div class="card-top">
+      <div class="card-name">Oysters on the Half Shell</div>
+      <div class="card-price">$18/doz</div>
+    </div>
+    <div class="card-desc">Rotating selection of farmed Pacific and Atlantic oysters with champagne mignonette.</div>
+    <div class="badges">
+      <span class="badge green">Best Choice</span>
+      <span class="badge dairy-free">No dairy</span>
+      <span class="badge pick">Top pick</span>
+    </div>
+    <div class="card-verdict">Farmed oysters score 6.69 — among the highest-rated species. Mignonette is vinegar-based. <strong>Your safest option.</strong></div>
+  </div>
+
+  <div class="card">
+    <div class="card-top">
+      <div class="card-name">Tuna Poke</div>
+      <div class="card-price">$16</div>
+    </div>
+    <div class="card-desc">Yellowfin tuna, avocado, sesame, soy, crispy wontons.</div>
+    <div class="badges">
+      <span class="badge yellow">Good Alternative</span>
+      <span class="badge dairy-free">No dairy</span>
+      <span class="badge ask">Ask re: egg in wontons</span>
+    </div>
+    <div class="card-verdict">Yellowfin sustainability varies by catch method. Wontons likely contain egg. <strong>Ask about both.</strong></div>
+  </div>
+
+  <div class="section-label">Starters</div>
+
+  <div class="card recommended">
+    <div class="card-top">
+      <div class="card-name">Seaweed Salad</div>
+      <div class="card-price">$12</div>
+    </div>
+    <div class="card-desc">Wakame, cucumber, sesame, rice vinegar dressing.</div>
+    <div class="badges">
+      <span class="badge vegan">Fully vegan</span>
+      <span class="badge pick">Safe harbor</span>
+    </div>
+  </div>
+
+  <div class="card skip">
+    <div class="card-top">
+      <div class="card-name">Clam Chowder</div>
+      <div class="card-price">$10</div>
+    </div>
+    <div class="badges"><span class="badge red">Skip — cream-based</span></div>
+  </div>
+
+  <div class="section-label">Mains</div>
+
+  <div class="card recommended">
+    <div class="card-top">
+      <div class="card-name">Mussels in White Wine Broth</div>
+      <div class="card-price">$24</div>
+    </div>
+    <div class="card-desc">Farmed blue mussels, garlic, herbs, crusty bread.</div>
+    <div class="badges">
+      <span class="badge green">Best Choice (Super Green)</span>
+      <span class="badge ask">Ask re: butter in broth</span>
+      <span class="badge pick">Top pick if dairy-free</span>
+    </div>
+    <div class="card-verdict">Farmed mussels are on the "Super Green" list. <strong>Ask if they can do olive oil instead of butter.</strong></div>
+  </div>
+
+  <div class="card recommended">
+    <div class="card-top">
+      <div class="card-name">Grilled Albacore</div>
+      <div class="card-price">$28</div>
+    </div>
+    <div class="card-desc">Pole-caught albacore, olive oil, herbs, roasted vegetables.</div>
+    <div class="badges">
+      <span class="badge green">Best Choice</span>
+      <span class="badge dairy-free">No dairy</span>
+      <span class="badge pick">Top pick</span>
+    </div>
+    <div class="card-verdict">Pole-caught albacore scores 3.97–4.44. Olive oil preparation is naturally dairy-free.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-top">
+      <div class="card-name">Imported Shrimp Scampi</div>
+      <div class="card-price">$26</div>
+    </div>
+    <div class="card-desc">Garlic butter sauce, linguine.</div>
+    <div class="badges">
+      <span class="badge red">Avoid — imported shrimp</span>
+      <span class="badge red">Dairy: butter sauce</span>
+    </div>
+    <div class="card-verdict">Imported shrimp from unknown sources often scores in the Avoid range. Also butter-based. <strong>Skip.</strong></div>
+  </div>
+
+  <div class="card skip">
+    <div class="card-top">
+      <div class="card-name">Lobster Roll</div>
+      <div class="card-price">$32</div>
+    </div>
+    <div class="badges">
+      <span class="badge red">Skip — butter + mayo</span>
+    </div>
+  </div>
+</div>
+
+<!-- ========== DRINKS ========== -->
+<div class="panel" id="drinks">
+  <div class="alt-note" style="margin-top:0.5rem;margin-bottom:0.75rem;">
+    <strong>Preference:</strong> Dry whites or ros&eacute; only. No red wine.
+  </div>
+
+  <div class="section-label">White wines</div>
+
+  <div class="wine-card top-pick">
+    <div class="wine-name">Muscadet S&egrave;vre-et-Maine</div>
+    <div class="wine-meta">$14/glass</div>
+    <div class="wine-note">Bone-dry, mineral, briny — the quintessential oyster wine.</div>
+  </div>
+
+  <div class="wine-card">
+    <div class="wine-name">Sauvignon Blanc</div>
+    <div class="wine-meta">$13/glass</div>
+    <div class="wine-note">Crisp and citrusy. Versatile across the whole meal.</div>
+  </div>
+
+  <div class="section-label">Beer</div>
+
+  <div class="wine-card">
+    <div class="wine-name">Local Pilsner</div>
+    <div class="wine-meta">Draft &middot; $8</div>
+    <div class="wine-note">Clean and crisp — classic with shellfish.</div>
+  </div>
+
+  <div class="section-label">Pairing strategy</div>
+  <div class="alt-note">
+    <strong>Best bet:</strong> Muscadet with oysters, then Sauvignon Blanc with the albacore. Pilsner works as a versatile single-drink option.
+  </div>
+</div>
+
+<!-- ========== ASK SERVER ========== -->
+<div class="panel" id="ask">
+  <div class="section-label">Priority questions</div>
+
+  <div class="q-card">
+    <span class="q-dish">Mussels —</span> is there butter in the white wine broth? Can you sub olive oil?
+  </div>
+  <div class="q-card">
+    <span class="q-dish">Tuna poke —</span> do the crispy wontons contain egg?
+  </div>
+  <div class="q-card">
+    <span class="q-dish">Albacore —</span> is this pole-caught or longline?<br>
+    <span style="font-size:0.72rem;color:var(--text-light);font-style:italic;">(Both are Best Choice, but pole-caught is higher rated)</span>
+  </div>
+
+  <div class="section-label">Worth asking if interested</div>
+
+  <div class="q-card">
+    <span class="q-dish">Shrimp scampi —</span> where are the shrimp sourced from?<br>
+    <span style="font-size:0.72rem;color:var(--text-light);font-style:italic;">(Imported shrimp is often Avoid; US-farmed would be better)</span>
+  </div>
+
+  <div class="alt-note" style="margin-top:1.25rem;">
+    <strong>Tip:</strong> In a real guide, this section would include context about the restaurant's knowledge level and willingness to accommodate dietary requests, based on research.
+  </div>
+</div>
+
+<div class="footer">
+  <div class="section-label">Sources</div>
+  <div class="source-links">
+    <a href="https://www.seafoodwatch.org/globalassets/sfw/pdf/whats-new/seafood-watch-complete-recommendation-list.pdf">
+      <span class="source-tag data">Data</span>
+      <span class="source-label">Seafood Watch<small>Monterey Bay Aquarium, Feb 2024</small></span>
+    </a>
+    <a href="https://example.com/menu">
+      <span class="source-tag menu">Menu</span>
+      <span class="source-label">The Kelp Garden Menu<small>example.com</small></span>
+    </a>
+    <a href="https://example.com/review">
+      <span class="source-tag review">Review</span>
+      <span class="source-label">Example Review Source<small>Sourcing details &amp; dish descriptions</small></span>
+    </a>
+  </div>
+</div>
+
+<script>
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById(tab.dataset.tab).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+});
+</script>
+</body>
+</html>
